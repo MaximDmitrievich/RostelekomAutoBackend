@@ -1,0 +1,100 @@
+version: "3.8"
+
+services:
+  mainApp:
+    container_name: mainapp_service
+    build: 
+      context: "./src/MainApp"
+      dockerfile: Dockerfile
+    image: mainapp_service
+    ports:
+      - "5000:5000"
+    environment:
+      APP_NAME: "mainApp"
+      APP_INSTANCE_ENVIRONMENT: "dev"
+      YANDEX_MAPS_API_KEY: 8c4121ff-f1b9-4603-ad5e-54f319fb18f8
+      APP_HOST: 0.0.0.0
+      APP_PORT: 5000
+      CACHE_HOST: cacheApp
+      CACHE_PORT: 5001
+
+  cacheApp:
+    container_name: cacheapp_service
+    build: 
+      context: "./src/CacheApp"
+      dockerfile: Dockerfile
+    image: cacheapp_service
+    ports:
+      - "5001:5001"
+    environment:
+      APP_NAME: "cacheApp"
+      APP_INSTANCE_ENVIRONMENT: "dev"
+      APP_HOST: 0.0.0.0
+      APP_PORT: 5001
+      CACHE_HOST: redis
+      CACHE_PORT: 6379
+
+  DBApp:
+    container_name: dbapp_service
+    build: 
+      context: "./src/DBApp"
+      dockerfile: Dockerfile
+    image: dbapp_service
+    ports:
+      - "5002:5002"
+    environment:
+      APP_NAME: "dbapp"
+      APP_INSTANCE_ENVIRONMENT: "dev"
+      APP_HOST: 0.0.0.0
+      APP_PORT: 5002
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+  
+  YOLOApp:
+    container_name: yoloapp_service
+    build: 
+      context: "./src/YOLOApp"
+      dockerfile: Dockerfile
+    image: yoloapp_service
+    ports:
+      - "5003:5003"
+    environment:
+      APP_NAME: "yoloapp"
+      APP_INSTANCE_ENVIRONMENT: "dev"
+      APP_HOST: 0.0.0.0
+      APP_PORT: 5003
+
+  fetchCameraApp:
+    container_name: fetchcameraapp_service
+    build: 
+      context: "./src/FetchCameraApp"
+      dockerfile: Dockerfile
+    image: fetchcameraapp_service
+    environment:
+      APP_NAME: "yoloapp"
+      APP_INSTANCE_ENVIRONMENT: "dev"
+      CACHE_HOST: cacheApp
+      CACHE_PORT: 5001
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null 
