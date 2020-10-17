@@ -1,4 +1,5 @@
 from aiohttp import ClientSession
+from json import dumps
 
 class CacheService:
     def __init__(self, client_session: ClientSession, url):
@@ -7,13 +8,15 @@ class CacheService:
 
     async def create(self, id, value):
         params = { "key": id }
-        return self.client_session.put(url=self.url, data=value, params=params)
+        headers= {'content-type': 'application/json'}
+        return await self.client_session.put(url=self.url, json={ "image": str(value) }, params=params, headers=headers)
 
     async def get(self, id):
         params = { "key": id }
-        return self.client_session.get(url=self.url, params=params)
+        return await self.client_session.get(url=self.url, params=params)
 
     async def update(self, id, value):
         params = { "key": id }
-        return self.client_session.post(url=self.url, data=value, params=params)
+        headers= {'content-type': 'application/json'}
+        return await self.client_session.post(url=self.url, json={ "image": str(value) }, params=params, headers=headers)
     

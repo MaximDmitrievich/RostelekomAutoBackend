@@ -1,6 +1,7 @@
-from aiohttp import ClientSession, ClientResponse
+from aiohttp import ClientSession, ClientResponse, MultipartReader
 from models.db_models import Camera
 from collections.abc import Iterable
+from base64 import b64encode
 
 class FetchImageService:
     def __init__(self, client_session: ClientSession, cameras):
@@ -10,8 +11,9 @@ class FetchImageService:
     async def fetch_images(self):
         result = []
         for camera in self.cameras:
-            print(camera.url)
             response: ClientResponse = await self.client_session.get(camera.url)
-            camera.b64str = response.json()
+            image_bytes = await response.read()
+            b64 = b64encode(image_bytes)
+            camera.b64str = b64
             result.append(camera)
         return result
