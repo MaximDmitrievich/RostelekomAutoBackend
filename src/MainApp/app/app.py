@@ -1,4 +1,5 @@
 from os import environ
+from aiohttp import ClientSession
 from aiohttp.web import Application, AppRunner, TCPSite
 from asyncio import get_event_loop
 from logging import INFO, getLogger
@@ -8,8 +9,6 @@ from services.db_provider import DBProvider
 from middlewares.exception_handler_middleware import ExceptionHandlerMiddleware
 from controllers.geolocation_controller import GeolocationController
 from services.cache_service import CacheService
-
-import pytz
 
 if __name__ == "__main__":
 

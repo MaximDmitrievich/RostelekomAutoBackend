@@ -1,4 +1,4 @@
 aiohttp
 asyncio
-pytz
+aiohttp_rest_api
 geopy
