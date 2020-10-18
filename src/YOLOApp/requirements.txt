@@ -1,7 +1,6 @@
 aiohttp
 aiortc
 asyncio
-json
-pytz
-geojson
-yandex-maps
+aiohttp_rest_api
+tensorflow==2.2
+Pillow

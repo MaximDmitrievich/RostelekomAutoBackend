@@ -2,10 +2,9 @@ from os import environ
 from aiohttp.web import Application, AppRunner, TCPSite
 from asyncio import get_event_loop
 from logging import INFO, getLogger
-from .middlewares.exception_handler_middleware import ExceptionHandlerMiddleware
-from .controllers.geolocation_controller import GeolocationController
-
-import pytz
+from middlewares.exception_handler_middleware import ExceptionHandlerMiddleware
+from controllers.yolo_controller import YOLOController
+from services.model_provider import ModelProvider
 
 if __name__ == "__main__":
 
@@ -14,13 +13,14 @@ if __name__ == "__main__":
 
     middleware = ExceptionHandlerMiddleware(logger)
 
-    controller = GeolocationController()
+    model_provider = ModelProvider("outputs")
+
+    controller = YOLOController()
 
     application = Application(middlewares=[middleware.logging], logger=logger)
 
     async def main():    
-        application.router.add_get('/', controller.get)
-        application.router.add_post('/entities', controller.post)
+        application.router.add_post('/detect', controller.post)
 
         runner = AppRunner(application)
         await runner.setup()

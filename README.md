@@ -60,3 +60,45 @@ __Цель приложения__ — помочь жильцам комфорт
 
 ### Описание API
 
+Базовый url
+```http(s)://{hostid}.ngrok.io/```
+
+#### По координатам
+
+Request:
+
+```http
+GET /geocontroller/coords?lat={decimal}&long={decimal}&radius={double}
+```
+
+```http
+HTTP/1.1 200 OK
+Status 200 OK
+Content-Type: application/json
+
+Body:
+[
+    {
+
+    }
+]
+```
+
+#### По адресу
+
+```http
+GET /geocontroller/address?address={str}&radius={double}
+```
+
+```http
+HTTP/1.1 200 OK
+Status 200 OK
+Content-Type: application/json
+
+Body:
+[
+    {
+        
+    }
+]
+```

@@ -18,8 +18,14 @@ class ParkingsController(AioHTTPRestEndpoint):
         collection = self.collection
         if collection is not None:
             if request.query is not None and len(request.query.keys()) > 0:
-                id = request.query['id']
-                entity = self.collection.find_one(filter={u'_id': int(id)})
+                entity = None
+                print(request.query.keys())
+                if 'id' in request.query:
+                    id = request.query['id']
+                    entity = self.collection.find_one(filter={u'_id': int(id)})
+                elif 'camid' in request.query.keys():
+                    id = request.query['camid']
+                    entity = self.collection.find_one(filter={u'cameraid': int(id)})
                 if entity is not None:
                     data = dumps(entity)
             else:
