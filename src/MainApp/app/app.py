@@ -1,7 +1,7 @@
 from os import environ
 from aiohttp import ClientSession
 from aiohttp.web import Application, AppRunner, TCPSite
-from asyncio import get_event_loop
+from asyncio import get_event_loop, ensure_future
 from logging import INFO, getLogger
 
 from services.geolocation_service import GeolocationService
@@ -18,25 +18,27 @@ if __name__ == "__main__":
     middleware = ExceptionHandlerMiddleware(logger)
     geoloc = GeolocationService(environ['GEOLOCATOR_AGENT'])
 
-    async def main():
-        async with ClientSession() as client_session:
-            cacher = CacheService(client_session, "http://{}:{}/redis".format(environ["CACHE_HOST"], environ["CACHE_PORT"]))
-            db_provider = DBProvider(client_session, "http://{}:{}/".format(environ["DB_HOST"], environ["DB_PORT"]))
-            controller = GeolocationController(db_provider, cacher, geoloc)
+    async def main(loop=None):
+        cacher = CacheService(None, "http://{}:{}/redis".format(environ["CACHE_HOST"], environ["CACHE_PORT"]))
+        db_provider = DBProvider(None, "http://{}:{}/".format(environ["DB_HOST"], environ["DB_PORT"]))
+        controller = GeolocationController(db_provider, cacher, geoloc)
 
-            application = Application(middlewares=[middleware.logging], logger=logger)
-            application.router.add_get('/geocontroller/coords', controller.get_by_coords)
-            application.router.add_get('/geocontroller/address', controller.get_by_address)
+        application = Application(middlewares=[middleware.logging], logger=logger)
+        application.router.add_get('/geocontroller/coords', controller.get_by_coords)
+        application.router.add_get('/geocontroller/address', controller.get_by_address)
 
-            runner = AppRunner(application)
-            await runner.setup()
-            site = TCPSite(runner, environ['APP_HOST'], int(environ['APP_PORT']))
-            await site.start()
+        runner = AppRunner(application)
+        await runner.setup()
+        site = TCPSite(runner, environ['APP_HOST'], int(environ['APP_PORT']))
+        await site.start()
 
     loop = get_event_loop()
     try:
-        loop.run_until_complete(main())
+        ensure_future(main(loop=loop), loop=loop)
+        loop.run_forever()
     except RuntimeError as exc:
+        logger.exception(exc)
         raise(exc)
     finally:
-        loop.run_forever()
+        loop.run_unitl_complete(main(loop=loop))
+        loop.close()

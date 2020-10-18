@@ -79,7 +79,9 @@ Content-Type: application/json
 Body:
 [
     {
-
+        "long": 37.626466,
+        "lat": 55.812488,
+        "free_places": 4
     }
 ]
 ```
@@ -98,7 +100,9 @@ Content-Type: application/json
 Body:
 [
     {
-        
+        "long": 37.626466,
+        "lat": 55.812488,
+        "free_places": 4
     }
 ]
 ```

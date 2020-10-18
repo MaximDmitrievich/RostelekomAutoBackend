@@ -19,31 +19,32 @@ class GeolocationController(AioHTTPRestEndpoint):
     async def get_by_coords(self, request: Request) -> Response:
         result = []
         if request.query is not None:
-            lat = request.query["lat"]
-            long = request.query["long"]
-            radius = request.query["max_radius"]
-            cameras = loads(self.db_provider.get_cameras())
+            lat = float(request.query["lat"])
+            long = float(request.query["long"])
+            radius = float(request.query["max_radius"])
+            cameras = loads(await self.db_provider.get_cameras())
             for camera in cameras:
-                if self.geolocation_service.get_cirlce(long, lat, camera.long, camera.lat) > radius:
+                if self.geolocation_service.get_circle(long, lat, camera['long'], camera['lat']) > radius:
                     cameras.remove(camera)
 
             for camera in cameras:
-                parkings = loads(self.db_provider.get_parkings(param_name='camid', id=camera._id))
-                result.append(list(map(lambda x: (x.long, x.lat), parkings)))
-        return result
+                parkings = loads(await self.db_provider.get_parkings(param_name='camid', id=int(camera['_id'])))
+                free_places = 4
+                result += list(map(lambda x: {"long": float(x['long']), "lat": float(x['lat']), "free_places": free_places }, parkings))
+        return respond_with_json(status=200, data=result)
 
     async def get_by_address(self, request: Request) -> Response:
         result = []
         if request.query is not None:
             address = request.query["address"]
             lat, long = self.geolocation_service.get_address(address)
-            radius = request.query["max_radius"]
-            cameras = loads(self.db_provider.get_cameras())
+            radius = float(request.query["max_radius"])
+            cameras = loads(await self.db_provider.get_cameras())
             for camera in cameras:
-                if self.geolocation_service.get_cirlce(long, lat, camera.long, camera.lat) > radius:
+                if self.geolocation_service.get_circle(long, lat, camera['long'], camera['lat']) > radius:
                     cameras.remove(camera)                
 
             for camera in cameras:
-                parkings = loads(self.db_provider.get_parkings(param_name='camid', id=camera._id))
-                result.append(list(map(lambda x: (x.long, x.lat), parkings)))
-        return result
+                parkings = loads(await self.db_provider.get_parkings(param_name='camid', id=int(camera['_id'])))
+                result.append(list(map(lambda x: {"long": x['long'], "lat": x['lat'], "free_places": 4 }, parkings)))
+        return respond_with_json(status=200, data=result)
