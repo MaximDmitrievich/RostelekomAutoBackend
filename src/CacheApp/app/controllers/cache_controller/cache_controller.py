@@ -31,8 +31,8 @@ class CacheController(AioHTTPRestEndpoint):
             body = await request.json()
             value_str = json.dumps(body)
             key = request.query['key']
-            created = self.redis_client.set(key, value_str)
-            if created is not None:
+            data = self.redis_client.set(key, value_str)
+            if data is not None:
                 status = 201
             else:
                 status = 400
@@ -46,14 +46,14 @@ class CacheController(AioHTTPRestEndpoint):
             value_str = json.dumps(body)
             key = request.query['key']
             value = self.redis_client.get(key)
-            updated = None
+            data = None
             if value is not None:
                 self.redis_client.delete(key)
-                updated = self.redis_client.append(key, value_str)
+                data = self.redis_client.append(key, value_str)
             else:
-                updated = self.redis_client.set(key, value_str)
+                data = self.redis_client.set(key, value_str)
             
-            if updated is not None:
+            if data is not None:
                 status = 201
             else:
                 status = 400
@@ -64,8 +64,8 @@ class CacheController(AioHTTPRestEndpoint):
         status = 500
         if request.query is not None:
             key = request.query['key']
-            deleted = self.redis_client.delete(key)
-            if deleted is not None:
+            data = self.redis_client.delete(key)
+            if data is not None:
                 status = 202
             else:
                 status = 404

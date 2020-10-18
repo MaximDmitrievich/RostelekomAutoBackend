@@ -12,12 +12,10 @@ class GeolocationController(AioHTTPRestEndpoint):
         self.db_provider = db_provider
         self.geolocation_service = geolocation_service
 
-    def connected_routes(self):
-        return ['/geolocation']
-
     async def get(self, request: Request) -> Response:
         if request.query is not None:
             latitude = request.query["latitude"]
             longtitude = request.query["longtitude"]
-            radius = request.query["radius"]
+            radius = request.query["max_radius"]
+            
         return 

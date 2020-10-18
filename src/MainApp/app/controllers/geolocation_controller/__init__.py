@@ -1,1 +1,1 @@
-from .geolocation_controller import *
+from .geolocation_controller import GeolocationController

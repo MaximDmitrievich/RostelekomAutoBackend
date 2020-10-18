@@ -1,12 +1,20 @@
-from math import radians, cos, sin, asin, sqrt
-from yandex_maps import api
+from geopy.geocoders import Nominatim
+from geopy.distance import geodesic, great_circle
 
 class GeolocationService:
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self, agent_name):
+        self.geolocator = Nominatim(user_agent=agent_name)
 
-    def get_geocode(self, address):
-        return api.geocode(self.api_key, address=address)
+    def get_coords(self, address):
+        location = self.geolocator.geocode(address)
+        return (location.latitude, location.longitude)
 
-    def get_address(self, longtitude, latitude):
-        return api.get_map_url(api_key=self.api_key, longitude=longtitude, latitude=latitude, zoom=13, width=300, height=300)
+    def get_address(self, long, lat):
+        location = self.geolocator.reverse("{}, {}".format(lat, long))
+        return location.address
+
+    def get_distance(self, long1, lat1, long2, lat2):
+        return geodesic((long1, lat1), (long2, lat2)).meters
+
+    def get_circle(self, long1, lat1, long2, lat2):
+        return great_circle((long1, lat1), (long2, lat2)).meters

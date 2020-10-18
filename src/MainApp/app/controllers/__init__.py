@@ -1,3 +1,2 @@
-from . import *
-from .geolocation_controller import GeolocationController
-from .statistic_controller import StatisticController
+from . import geolocation_controller
+from . import statistic_controller

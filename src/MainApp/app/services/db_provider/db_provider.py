@@ -5,5 +5,5 @@ class DBProvider:
         self.uri = uri
         self.client_session = client_session
 
-    async def create(self, object):
+    async def create(self, object, path):
         self.client_session

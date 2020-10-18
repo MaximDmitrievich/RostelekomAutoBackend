@@ -12,7 +12,7 @@ from models.db_models import Camera
 
 if __name__ == "__main__":
     cameras = []
-    cameras.append(Camera(id=1, long=37.6290409, lat=55.8151547, url='http://91.233.230.14/jpg/image.jpg', address="Россия Москва, Звёздный бульвар"))
+    cameras.append(Camera(id=1, long=37.62904822826386, lat=55.81515422384692, url='http://91.233.230.14/jpg/image.jpg', address="Россия Москва, Звёздный бульвар"))
     logger = getLogger(environ['APP_NAME'])    
 
     async def looped(loop=None):
@@ -24,7 +24,6 @@ if __name__ == "__main__":
                     photos = await fetcher.fetch_images()
                     for photo in photos:
                         await cacher.update(photo.id, photo.b64str)
-                        print('executed')
                 except Exception as exc:
                     logger.exception(exc)
                 await sleep(5, loop=loop)

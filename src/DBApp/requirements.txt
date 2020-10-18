@@ -1,8 +1,4 @@
 aiohttp
-aiortc
+aiohttp_rest_api
 asyncio
-json
-pytz
-geojson
-yandex-maps
 pymongo

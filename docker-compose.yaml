@@ -12,7 +12,7 @@ services:
     environment:
       APP_NAME: "mainApp"
       APP_INSTANCE_ENVIRONMENT: "dev"
-      YANDEX_MAPS_API_KEY: 8c4121ff-f1b9-4603-ad5e-54f319fb18f8
+      GEOLOCATOR_AGENT: #8c4121ff-f1b9-4603-ad5e-54f319fb18f8
       APP_HOST: 0.0.0.0
       APP_PORT: 5000
       CACHE_HOST: cacheApp
@@ -49,6 +49,8 @@ services:
       APP_PORT: 5002
       MONGODB_HOST: mongodb
       MONGODB_PORT: 27017
+      MONGODB_LOGIN: root
+      MONGODB_PASSWORD: rootpassword
   
   YOLOApp:
     container_name: yoloapp_service
@@ -92,10 +94,11 @@ services:
     container_name: mongodb_service
     image: mongo:latest
     environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
     volumes:
-      - ./data/db:/data/db
+      - $PWD/mongodb_data_container:/data/db
     ports:
       - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null 
+    command: mongod --dbpath /data/db
+    

@@ -1,1 +1,1 @@
-from .geolocation_service import GeolocationService
+from . import geolocation_service
