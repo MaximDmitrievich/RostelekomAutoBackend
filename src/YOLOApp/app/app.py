@@ -5,9 +5,11 @@ from logging import INFO, getLogger
 from middlewares.exception_handler_middleware import ExceptionHandlerMiddleware
 from controllers.yolo_controller import YOLOController
 from services.model_provider import ModelProvider
+import tensorflow as tf
 
 if __name__ == "__main__":
-
+    my_devices = tf.config.experimental.list_physical_devices(device_type='CPU')
+    tf.config.experimental.set_visible_devices(devices= my_devices, device_type='CPU')
     logger = getLogger(environ['APP_NAME'])
     logger.setLevel(INFO)
 

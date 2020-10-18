@@ -1,4 +1,4 @@
-FROM python:3.7.3
+FROM tensorflow/tensorflow:latest-py3
 
 RUN pip install --upgrade pip
 

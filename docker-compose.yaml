@@ -70,6 +70,7 @@ services:
       APP_INSTANCE_ENVIRONMENT: "dev"
       APP_HOST: 0.0.0.0
       APP_PORT: 5003
+      CUDA_VISIBLE_DEVICES: "-1"
 
   fetchCameraApp:
     container_name: fetchcameraapp_service

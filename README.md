@@ -4,7 +4,7 @@ Rostelekom Auto Backend
 
 ## Дополнительные Github-репозитории
 
-1. (Первый)[]
+1. [iOS application](https://github.com/godemodegame/RostelecomAuto)
 
 ## Проблематика
 
