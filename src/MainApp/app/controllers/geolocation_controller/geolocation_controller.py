@@ -31,7 +31,8 @@ class GeolocationController(AioHTTPRestEndpoint):
 
             for camera in cameras:
                 parkings = loads(await self.db_provider.get_parkings(param_name='camid', id=int(camera['_id'])))
-                image = self.cacher.get(int(camera['_id']))
+                #image = await self.cacher.get(int(camera['_id']))
+                #pl = self.yolo_provider.post(image)
                 
                 free_places = 4
                 result += list(map(lambda x: {"long": float(x['long']), "lat": float(x['lat']), "free_places": free_places }, parkings))
@@ -50,7 +51,7 @@ class GeolocationController(AioHTTPRestEndpoint):
 
             for camera in cameras:
                 parkings = loads(await self.db_provider.get_parkings(param_name='camid', id=int(camera['_id'])))
-                image = self.cacher.get(int(camera['_id']))
+                #image = await self.cacher.get(int(camera['_id']))
 
                 free_places = 4
                 result += list(map(lambda x: {"long": float(x['long']), "lat": float(x['lat']), "free_places": free_places }, parkings))

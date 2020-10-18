@@ -6,7 +6,7 @@ class YOLOProvider:
         self.client_session = client_session
         self.url = url
 
-    async def get(self, data):
+    async def post(self, data):
         if self.client_session is None:
             async with ClientSession() as session:
                 response = await session.post(url=self.url, data=data)

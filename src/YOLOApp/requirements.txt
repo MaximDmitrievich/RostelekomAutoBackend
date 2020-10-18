@@ -2,7 +2,7 @@ aiohttp
 aiortc
 asyncio
 aiohttp_rest_api
-tensorflow==2.2
+tensorflow==2.1
 Pillow==4.1.1
 numpy
 opencv-python
