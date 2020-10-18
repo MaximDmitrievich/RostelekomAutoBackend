@@ -14,8 +14,8 @@ class YOLOController(AioHTTPRestEndpoint):
     async def post(self, request: Request) -> Response:
         status = 500
         data = None
-        if request.body_exists():
-            body = request.json()
+        if request.body_exists:
+            body = await request.json()
             data = dumps(self.model_provider.detect(body['image']))
             if data is not None:
                 status = 202

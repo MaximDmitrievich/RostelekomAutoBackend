@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     model_provider = ModelProvider("outputs")
 
-    controller = YOLOController()
+    controller = YOLOController(model_provider)
 
     application = Application(middlewares=[middleware.logging], logger=logger)
 

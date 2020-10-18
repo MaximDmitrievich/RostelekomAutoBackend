@@ -68,7 +68,7 @@ __Цель приложения__ — помочь жильцам комфорт
 Request:
 
 ```http
-GET /geocontroller/coords?long={decimal}&lat={decimal}&radius={double}
+GET /geocontroller/coords?long={decimal}&lat={decimal}&max_radius={double}
 ```
 
 ```http

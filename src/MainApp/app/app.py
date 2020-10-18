@@ -4,6 +4,7 @@ from aiohttp.web import Application, AppRunner, TCPSite
 from asyncio import get_event_loop, ensure_future
 from logging import INFO, getLogger
 
+from services.yolo_provider import YOLOProvider
 from services.geolocation_service import GeolocationService
 from services.db_provider import DBProvider
 from middlewares.exception_handler_middleware import ExceptionHandlerMiddleware
@@ -21,7 +22,8 @@ if __name__ == "__main__":
     async def main(loop=None):
         cacher = CacheService(None, "http://{}:{}/redis".format(environ["CACHE_HOST"], environ["CACHE_PORT"]))
         db_provider = DBProvider(None, "http://{}:{}/".format(environ["DB_HOST"], environ["DB_PORT"]))
-        controller = GeolocationController(db_provider, cacher, geoloc)
+        yolo_provider = YOLOProvider(None, "http://{}:{}/".format(environ["YOLO_HOST"], environ["YOLO_PORT"]))
+        controller = GeolocationController(db_provider, cacher, geoloc, yolo_provider)
 
         application = Application(middlewares=[middleware.logging], logger=logger)
         application.router.add_get('/geocontroller/coords', controller.get_by_coords)

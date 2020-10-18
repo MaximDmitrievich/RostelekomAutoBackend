@@ -19,6 +19,8 @@ services:
       CACHE_PORT: 5001
       DB_HOST: DBApp
       DB_PORT: 5002
+      YOLO_HOST: YOLOApp
+      YOLO_PORT: 5003
       
 
   cacheApp:
